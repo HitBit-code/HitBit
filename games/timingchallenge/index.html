@@ -601,14 +601,18 @@
     running = true;
   }
 
+  // iOS-safe Play Again
   document.getElementById("playAgainBtn").addEventListener("click", (e) => {
     e.stopPropagation();
     restart();
   });
 
+  // TOUCH: ignore when overlay is visible so button works
   window.addEventListener("touchstart", (e) => {
     const overlay = document.getElementById("overlay");
-    if (overlay.classList.contains("show")) return;
+    if (overlay.classList.contains("show")) {
+      return;
+    }
 
     e.preventDefault();
 
@@ -616,6 +620,7 @@
     else hit();
   }, { passive: false });
 
+  // MOUSE
   window.addEventListener("mousedown", (e) => {
     const overlay = document.getElementById("overlay");
     if (overlay.classList.contains("show")) return;
@@ -624,6 +629,7 @@
     else hit();
   });
 
+  // KEYBOARD
   window.addEventListener("keydown", e => {
     if (e.code === "Space" && !spaceDown) {
       spaceDown = true;
