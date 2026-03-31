@@ -195,14 +195,14 @@ function spawnWave() {
 }
 
 // Update balls
-function updateBalls() {
+function updateBalls(dt) {
     let lostHeartThisFrame = false;
 
     for (let i = balls.length - 1; i >= 0; i--) {
         const b = balls[i];
-        b.x += b.vx;
-        b.y += b.vy;
-        b.vy += b.gravity;
+        b.x += b.vx * dt;
+        b.y += b.vy * dt;
+        b.vy += b.gravity * dt;
         if (b.vy > 15) b.vy = 15;
 
         if (b.y - b.radius < b.maxHeight) { b.y = b.maxHeight + b.radius; b.vy = 0; }
@@ -398,14 +398,21 @@ canvas.addEventListener("mousedown",(e)=>handleInput(e.clientX,e.clientY));
 canvas.addEventListener("touchstart",(e)=>handleInput(e.touches[0].clientX,e.touches[0].clientY));
 document.getElementById("startScreen").addEventListener("click",startGame);
 
+// ⭐ DT SETUP
+let lastTime = performance.now();
+
 function loop(){
+    const now = performance.now();
+    let dt = (now - lastTime) / 16.666;
+    lastTime = now;
+
     ctx.clearRect(0,100,canvas.width,canvas.height);
     if(gameStarted && !gameOverState){
         if(balls.length===0){
             waveDelay++;
             if(waveDelay>100){spawnWave(); waveDelay=0;}
         }
-        if(balls.length>0) updateBalls();
+        if(balls.length>0) updateBalls(dt);
     }
     drawUI();
     balls.forEach(drawBall);
