@@ -2,7 +2,10 @@
 <html>
 <head>
 <title>Orb-Fall</title>
-<link rel="icon" href="favicon.ico" type="image/x-icon">
+
+<!-- Correct favicon -->
+<link rel="icon" href="/HitBit/favicon.ico?v=3" type="image/x-icon">
+
 <style>
 body {
     margin: 0;
@@ -85,7 +88,51 @@ function resizeCanvas() {
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-function goHome() { window.location.href = "index.html"; }
+function goHome() { window.location.href = "/HitBit/"; }
+
+// ⭐ BUILT-IN SOUND ENGINE (soft pop, ding, thud)
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === "normal") {
+        // ⭐ Soft POP sound
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(380, audioCtx.currentTime + 0.12);
+
+        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+    }
+
+    if (type === "heart") {
+        // Bright ding
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(650, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.15);
+
+        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+    }
+
+    if (type === "bomb") {
+        // Low thud
+        osc.type = "square";
+        osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.2);
+
+        gain.gain.setValueAtTime(0.45, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+    }
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.35);
+}
 
 // Load stored data
 let pastScores = JSON.parse(localStorage.getItem("orbFallScores") || "[]").slice(-50);
@@ -192,10 +239,25 @@ function handleInput(x, y) {
     }
 }
 
-// Ball click handling
+// Ball click handling + sounds
 function handleClick(b) {
-    if (b.type === BOMB) { loseHeart(); combo = 0; return; }
-    if (b.type === HEART) { hearts = Math.min(5, hearts + 1); combo++; return; }
+    if (b.type === BOMB) {
+        playSound("bomb");
+        loseHeart();
+        combo = 0;
+        return;
+    }
+
+    if (b.type === HEART) {
+        playSound("heart");
+        hearts = Math.min(5, hearts + 1);
+        combo++;
+        return;
+    }
+
+    // Normal orb = soft pop
+    playSound("normal");
+
     combo++;
     if (combo > maxCombo) maxCombo = combo;
     score += 10 * combo;
@@ -239,7 +301,6 @@ function drawHeart(x, y, size, color) {
     ctx.restore();
 }
 
-// Draw UI
 function drawUI() {
     ctx.clearRect(0, 0, canvas.width, 100);
     for (let i = 0; i < hearts; i++) drawHeart(30 + i*50, 50, 20, "#00ff00");
@@ -262,11 +323,10 @@ function startGame() {
     document.getElementById("startScreen").style.display = "none";
 }
 
-// Game over with **responsive neon line graph**
+// Game over
 function showGameOver() {
     gameOverState = true;
 
-    // Save score and limit to 50
     pastScores.push(score);
     if (pastScores.length > 50) pastScores.shift();
     localStorage.setItem("orbFallScores", JSON.stringify(pastScores));
@@ -293,7 +353,6 @@ function showGameOver() {
 
     document.getElementById("gameover").style.display = "block";
 
-    // Responsive canvas for graph
     const graphCanvas = document.getElementById("scoreGraph");
     const g = graphCanvas.getContext("2d");
     const containerWidth = Math.min(window.innerWidth * 0.9, 600);
@@ -306,7 +365,6 @@ function showGameOver() {
     const h = containerHeight - padding*2;
     const maxScore = Math.max(...pastScores);
 
-    // Neon line
     g.beginPath();
     pastScores.forEach((s,i)=>{
         const x = padding + (i / (pastScores.length-1||1)) * w;
@@ -321,7 +379,6 @@ function showGameOver() {
     g.stroke();
     g.shadowBlur = 0;
 
-    // Draw points
     pastScores.forEach((s,i)=>{
         const x = padding + (i / (pastScores.length-1||1)) * w;
         const y = containerHeight - padding - (s/maxScore)*h;
@@ -337,12 +394,10 @@ function showGameOver() {
 
 document.getElementById("gameover").addEventListener("click",()=>location.reload());
 
-// Event listeners
 canvas.addEventListener("mousedown",(e)=>handleInput(e.clientX,e.clientY));
 canvas.addEventListener("touchstart",(e)=>handleInput(e.touches[0].clientX,e.touches[0].clientY));
 document.getElementById("startScreen").addEventListener("click",startGame);
 
-// Main loop
 function loop(){
     ctx.clearRect(0,100,canvas.width,canvas.height);
     if(gameStarted && !gameOverState){
