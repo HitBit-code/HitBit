@@ -291,29 +291,30 @@ function update(dt){
 
         if(ball.strafeFlipCooldown>0) ball.strafeFlipCooldown--;
 
-        if(ball.strafeFlipCooldown===0 && Math.random()<0.11){
+        // HARDER AI: flip directions more often
+        if(ball.strafeFlipCooldown===0 && Math.random()<0.25){
             const flipType = Math.random();
-            if(flipType<0.4) ball.strafeDirX*=-1;
-            else if(flipType<0.8) ball.strafeDirY*=-1;
+            if(flipType<0.3) ball.strafeDirX*=-1;
+            else if(flipType<0.6) ball.strafeDirY*=-1;
             else { ball.strafeDirX*=-1; ball.strafeDirY*=-1; }
-            ball.strafeFlipCooldown = 10;
+            ball.strafeFlipCooldown = 5;
         }
 
-        if(!ball.strafePause && Math.random()<0.002) ball.strafePause=5;
+        // HARDER AI: less pausing, more bursts, stronger randomness
+        if(!ball.strafePause && Math.random()<0.01) ball.strafePause=3;
 
         if(ball.strafePause>0){
             ball.strafePause--;
         } else {
-
-            if(!ball.strafeBurst && Math.random()<0.08) ball.strafeBurst=10;
-            let force = ball.strafeBurst>0 ? 0.85 : 0.45;
+            if(!ball.strafeBurst && Math.random()<0.2) ball.strafeBurst=12;
+            let force = ball.strafeBurst>0 ? 1.2 : 0.6;
             if(ball.strafeBurst>0) ball.strafeBurst--;
 
             ball.vx += ball.strafeDirX * force * dt;
             ball.vy += ball.strafeDirY * force * dt;
 
-            ball.vx += (Math.random()-0.5)*0.22*dt;
-            ball.vy += (Math.random()-0.5)*0.22*dt;
+            ball.vx += (Math.random()-0.5)*0.5*dt;
+            ball.vy += (Math.random()-0.5)*0.5*dt;
         }
 
         ball.health -= dt/120;
