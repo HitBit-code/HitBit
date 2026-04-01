@@ -101,7 +101,6 @@ function playSound(type) {
     gain.connect(audioCtx.destination);
 
     if (type === "normal") {
-        // ⭐ Soft POP sound
         osc.type = "sine";
         osc.frequency.setValueAtTime(520, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(380, audioCtx.currentTime + 0.12);
@@ -111,7 +110,6 @@ function playSound(type) {
     }
 
     if (type === "heart") {
-        // Bright ding
         osc.type = "triangle";
         osc.frequency.setValueAtTime(650, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.15);
@@ -121,7 +119,6 @@ function playSound(type) {
     }
 
     if (type === "bomb") {
-        // Low thud
         osc.type = "square";
         osc.frequency.setValueAtTime(120, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.2);
@@ -134,7 +131,6 @@ function playSound(type) {
     osc.stop(audioCtx.currentTime + 0.35);
 }
 
-// Load stored data
 let pastScores = JSON.parse(localStorage.getItem("orbFallScores") || "[]").slice(-50);
 let highscore = parseInt(localStorage.getItem("orbFallHighscore") || "0");
 
@@ -153,12 +149,10 @@ const BOMB = "bomb";
 const HEART = "heart";
 const maxBallsOnScreen = 3;
 
-// Balls per wave
 function ballsPerWave() {
     return Math.min(2 + Math.floor((wave-1)/2), maxBallsOnScreen);
 }
 
-// Spawn ball
 function spawnBall() {
     if (balls.length >= maxBallsOnScreen) return;
     const x = Math.random() * (canvas.width - 100) + 50;
@@ -187,14 +181,13 @@ function spawnBall() {
     });
 }
 
-// Spawn wave
 function spawnWave() {
     const count = ballsPerWave();
     for (let i = 0; i < count; i++) spawnBall();
     wave++;
 }
 
-// Update balls
+// ✅ FIXED HERE
 function updateBalls(dt) {
     let lostHeartThisFrame = false;
 
@@ -213,7 +206,7 @@ function updateBalls(dt) {
         if (!b.inScreen && b.y - b.radius <= canvas.height) b.inScreen = true;
 
         if (b.inScreen && b.y - b.radius > canvas.height) {
-            if (!lostHeartThisFrame && b.type !== BOMB) {
+            if (!lostHeartThisFrame && b.type === NORMAL) {
                 loseHeart();
                 combo = 0;
                 lostHeartThisFrame = true;
@@ -223,7 +216,6 @@ function updateBalls(dt) {
     }
 }
 
-// Input
 function handleInput(x, y) {
     if (!gameStarted) { startGame(); return; }
     if (gameOverState) return;
@@ -239,7 +231,6 @@ function handleInput(x, y) {
     }
 }
 
-// Ball click handling + sounds
 function handleClick(b) {
     if (b.type === BOMB) {
         playSound("bomb");
@@ -255,7 +246,6 @@ function handleClick(b) {
         return;
     }
 
-    // Normal orb = soft pop
     playSound("normal");
 
     combo++;
@@ -263,13 +253,11 @@ function handleClick(b) {
     score += 10 * combo;
 }
 
-// Lose heart
 function loseHeart() {
     hearts--;
     if (hearts <= 0) { showGameOver(); }
 }
 
-// Draw UI
 function drawBall(b) {
     ctx.beginPath();
     if (b.type === NORMAL) ctx.fillStyle = "#66ccff";
@@ -317,13 +305,11 @@ function drawUI() {
     ctx.fillText("Orb-Fall", 10, canvas.height - 20);
 }
 
-// Start game
 function startGame() {
     gameStarted = true;
     document.getElementById("startScreen").style.display = "none";
 }
 
-// Game over
 function showGameOver() {
     gameOverState = true;
 
@@ -398,7 +384,6 @@ canvas.addEventListener("mousedown",(e)=>handleInput(e.clientX,e.clientY));
 canvas.addEventListener("touchstart",(e)=>handleInput(e.touches[0].clientX,e.touches[0].clientY));
 document.getElementById("startScreen").addEventListener("click",startGame);
 
-// ⭐ DT SETUP
 let lastTime = performance.now();
 
 function loop(){
