@@ -301,12 +301,13 @@ canvas.height = HEIGHT;
 let stack = [], current, fallingBlocks = [];
 let score = 0, lives = 3, gameOver = false, endingScroll = false;
 let speed = 3, direction = 1, cameraY = 0, targetCameraY = 0;
-let hue = 160;
+// RESTORED: Initial hue to dark blue
+let hue = 160; 
 let accuracyList = [];
 let sessionScores = [];
 let sessionAccuracies = [];
 let zoom = 1, lastTime = 0;
-let animationId; // Keep track of the loop
+let animationId;
 
 function startGame() {
   document.getElementById("startScreen").style.opacity = "0";
@@ -336,17 +337,20 @@ function drawHearts() {
 function resetGame() {
   if (animationId) cancelAnimationFrame(animationId);
   stack = []; 
-  fallingBlocks = []; // FIX: Clear falling pieces on reset
+  // RETAINED FIX: Clear falling pieces on reset
+  fallingBlocks = []; 
   score = 0; 
   lives = 3;
   drawHearts();
   accuracyList = []; 
   gameOver = false; 
   endingScroll = false;
-  speed = 3; // FIX: Reset speed
+  // RETAINED FIX: Reset speed/direction
+  speed = 3; 
   direction = 1; 
   cameraY = 0; 
   targetCameraY = 0;
+  // RESTORED: Reset hue to start of gradient
   hue = 160; 
   zoom = 1; 
   lastTime = performance.now();
@@ -360,7 +364,11 @@ function resetGame() {
 
 function spawnBlock() {
   const top = stack[stack.length - 1];
-  hue += 6; if (hue > 360) hue = 0; // Better hue cycle
+  
+  // RESTORED: hue cycle between 160 (blue) and 200 (green)
+  hue += 6; 
+  if (hue > 200) hue = 160; 
+  
   current = { x: 0, y: top.y - BLOCK_H, w: top.w, h: BLOCK_H, hue: hue };
 }
 
@@ -390,7 +398,8 @@ function drop() {
   }
 
   score += 1;
-  if (score % 5 === 0) speed += 0.3; // Slightly faster progression
+  // Difficulty curve retained
+  if (score % 5 === 0) speed += 0.3; 
   stack.push({ ...current });
   scoreEl.textContent = score;
   heightEl.textContent = `${stack.length * FEET_PER_BLOCK} ft`;
@@ -447,11 +456,11 @@ function endGame() {
 
 function loop(timestamp) {
   if (!lastTime) lastTime = timestamp;
-  const dt = Math.min(0.1, (timestamp - lastTime) / 1000); // Cap dt to avoid jumps
+  const dt = Math.min(0.1, (timestamp - lastTime) / 1000); 
   lastTime = timestamp;
 
   if (!gameOver && !endingScroll) {
-    // FIX: Cleaner movement logic to prevent jitter
+    // RETAINED FIX: Clean movement logic to prevent jitter
     current.x += speed * direction * dt * 60;
     
     if (direction === 1 && current.x + current.w >= WIDTH) {
@@ -473,10 +482,11 @@ function loop(timestamp) {
   
   stack.forEach(b => draw3DBlock(b.x, b.y, b.w, b.h, b.hue));
   
+  // RETAINED FIX: Correct gravity logic for falling pieces
   for (let i = fallingBlocks.length - 1; i >= 0; i--) {
     let b = fallingBlocks[i];
     b.y += b.vy * dt * 60; 
-    b.vy += 0.4 * dt * 60; // Gravity fixed
+    b.vy += 0.4 * dt * 60; 
     b.rot += b.vr * dt * 60;
     draw3DBlock(b.x, b.y, b.w, b.h, b.hue, b.rot);
     if (b.y > HEIGHT + 200) fallingBlocks.splice(i, 1);
