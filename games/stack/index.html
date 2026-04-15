@@ -139,12 +139,16 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 30px rgba(0, 255, 102, 0.4);
+    overflow: hidden; /* Ensures zoom doesn't break border */
   }
 
+  /* Fixed: Zoomed in the logo and ensured it fills space */
   #startLogo img {
-    width: 70px;
-    height: 70px;
+    width: 85px; 
+    height: 85px;
+    object-fit: contain;
     filter: drop-shadow(0 0 10px #00ff66);
+    transform: scale(1.15); /* Adds an extra zoom boost */
   }
 
   #startTitle {
@@ -445,7 +449,7 @@ function endGame() {
   sessionAccuracies.push(currentAcc);
 
   const avgScore = sessionScores.reduce((a, b) => a + b, 0) / sessionScores.length;
-  const avgAcc = sessionAccuracies.reduce((a, b) => a + b, 0) / sessionAccuracies.length;
+  const avgAcc = sessionAccuracies.push(currentAcc).length ? (sessionAccuracies.reduce((a, b) => a + b, 0) / sessionAccuracies.length) : 0;
 
   let high = localStorage.getItem("hitbitHigh") || 0;
   if (score > high) {
