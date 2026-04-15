@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HitBit 3D Stack</title>
-<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
 <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@300;600&display=swap" rel="stylesheet">
 
 <style>
@@ -257,15 +257,15 @@
 
 <body>
 
-<a id="homeBtn" href="../index.html">
-  <img src="../favicon.ico" alt="Logo">
+<a id="homeBtn" href="../../index.html">
+  <img src="../../favicon.ico" alt="Logo">
   HitBit
 </a>
 
 <div id="startScreen">
   <div id="startBadge">
     <div id="startLogo">
-      <img src="../favicon.ico" alt="Logo">
+      <img src="../../favicon.ico" alt="Logo">
     </div>
   </div>
   <div id="startTitle">HitBit Stack</div>
@@ -331,9 +331,9 @@ let stack = [], current, fallingBlocks = [];
 let score = 0, lives = 3, gameOver = false, endingScroll = false;
 let speed = 3, direction = 1, cameraY = 0, targetCameraY = 0;
 let hue = 160;
-let accuracyList = []; // Reset per game
-let sessionScores = []; // Persistence across rounds
-let sessionAccuracies = []; // Persistence across rounds
+let accuracyList = [];
+let sessionScores = [];
+let sessionAccuracies = [];
 let zoom = 1, lastTime = 0;
 
 function startGame() {
@@ -441,7 +441,6 @@ function draw3DBlock(x, y, w, h, baseHue, rot = 0) {
 function endGame() {
   const currentAcc = accuracyList.length > 0 ? (accuracyList.reduce((a, b) => a + b, 0) / accuracyList.length) : 0;
   
-  // Save round stats to session persistence
   sessionScores.push(score);
   sessionAccuracies.push(currentAcc);
 
