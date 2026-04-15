@@ -13,15 +13,6 @@
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "url": "https://hitbit-code.github.io/HitBit/",
-  "logo": "https://hitbit-code.github.io/HitBit/favicon.ico"
-}
-</script>
-
 <meta name="msvalidate.01" content="E4B2215A232B2D855D7B8ADE26C88488">
 <meta name="google-site-verification" content="HlleK9wn857avK0DAuuxwoNd4ys6qjdN4mNqjG7cbxI">
 
@@ -43,14 +34,15 @@
 <meta name="twitter:description" content="Test your reflexes and precision with polished arcade-style browser games.">
 <meta name="twitter:image" content="https://hitbit-code.github.io/HitBit/images/preview.png">
 
-<link rel="icon" href="https://hitbit-code.github.io/HitBit/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="https://hitbit-code.github.io/HitBit/favicon.ico">
+<link rel="icon" href="/HitBit/favicon.ico?v=3" type="image/x-icon">
+<link rel="apple-touch-icon" href="/HitBit/favicon.ico?v=3">
 
 <link rel="preload" href="/HitBit/images/timing.png" as="image">
 <link rel="preload" href="/HitBit/images/visual.png" as="image">
 <link rel="preload" href="/HitBit/images/Orb-Fall.png" as="image">
 <link rel="preload" href="/HitBit/images/strafe.png" as="image">
 <link rel="preload" href="/HitBit/images/memory.png" as="image">
+<link rel="preload" href="/HitBit/images/stack.png" as="image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -177,7 +169,6 @@ body {
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
-/* Hover Spotlight */
 .game-card::before {
   content: "";
   position: absolute;
@@ -189,7 +180,6 @@ body {
 }
 .game-card:hover::before { opacity: 1; }
 
-/* IMAGE */
 .game-image {
   width: 100%;
   aspect-ratio: 16/10;
@@ -202,7 +192,6 @@ body {
   opacity: 1;
 }
 
-/* CARD BODY */
 .card-body {
   padding: 24px;
   display: flex;
@@ -309,19 +298,30 @@ footer {
 <nav class="navbar">
   <div class="nav-inner">
     <div class="nav-logo">
-      <img src="https://hitbit-code.github.io/HitBit/favicon.ico" alt="Logo">
+      <img src="/HitBit/favicon.ico?v=3" alt="Logo">
       HitBit
     </div>
   </div>
 </nav>
 
 <header class="hero">
-  <img src="https://hitbit-code.github.io/HitBit/favicon.ico" class="hero-logo" alt="HitBit Logo">
+  <img src="/HitBit/favicon.ico?v=3" class="hero-logo" alt="HitBit Logo">
   <h1>Choose Your Challenge</h1>
 </header>
 
 <main class="container">
   <div class="grid">
+
+    <div class="game-card">
+      <img src="/HitBit/images/stack.png" class="game-image" alt="HitBit Stack game preview">
+      <div class="card-body">
+        <h2 class="game-title">HitBit Stack</h2>
+        <div class="card-actions">
+          <a href="/HitBit/games/stack/" class="play-btn">Play</a>
+          <span class="info-btn" onclick="openInfo('stack')">Info</span>
+        </div>
+      </div>
+    </div>
 
     <div class="game-card">
       <img src="/HitBit/images/timing.png" class="game-image" alt="Timing Challenge game preview">
@@ -415,11 +415,12 @@ function openInfo(game) {
   const content = document.getElementById("panelContent");
   
   const data = {
-    timing: { t: "Timing Challenge", c: `Tap exactly when the spinning line overlaps the target bar.<br><br><strong>How it works:</strong><br>• A neon line rotates around the circle<br>• A target bar appears somewhere on the ring<br>• Tap when the line crosses the bar<br><br><strong>Scoring:</strong><br>• Perfect hits give bonus points<br>• Spinner gets faster<br>• Target shrinks<br>• Build combos<br>` },
+    stack: { t: "HitBit Stack", c: `Test your rhythm and precision by stacking blocks as high as you can.<br><br><strong>How it works:</strong><br>• Blocks slide back and forth across the screen<br>• Tap/Space to drop the block onto the stack<br>• Any part of the block hanging over the edge is sliced off<br>• The blocks get smaller as you miss<br><br><strong>Features:</strong><br>• 3D Isometric neon style<br>• Smooth camera scrolling<br>• Lives system to keep you in the game<br>• Performance stats (Height, Accuracy, Highscore)` },
+    timing: { t: "Timing Challenge", c: `Tap exactly when the spinning line overlaps the target bar.<br><br><strong>How it works:</strong><br>• A neon line rotates around the circle<br>• A target bar appears somewhere on the ring<br>• Tap when the line crosses the bar<br><br><strong>Scoring:</strong><br>• Perfect hits give bonus points<br>• Spinner gets faster<br>• Build combos<br>` },
     reaction: { t: "Visual Reaction", c: `React as fast as possible when the screen turns green.<br><br><strong>How it works:</strong><br>• Tap to begin<br>• Wait for green<br>• Tap instantly<br><br><strong>Scoring:</strong><br>• Reaction time in ms<br>• Best saved locally<br>` },
-    orbfall: { t: "Orb-Fall", c: `Test your reflexes in <strong>Orb-Fall</strong>, a fast-paced arcade game where neon orbs fall from the top of the screen!<br><br><strong>How it works:</strong><br>• Tap normal orbs to score points<br>• Avoid bombs (red balls) — they cost a heart<br>• Catch hearts (pink balls) to stay alive<br>• Build combos for massive scores<br><br><strong>Progression:</strong><br>• Waves get faster and harder<br>• Track your last 50 scores on a glowing line graph<br>• Beat your high score and climb your own leaderboard<br><br><strong>Features:</strong><br>• Neon arcade visuals<br>• Smooth physics<br>• Mobile + desktop friendly<br>• Simple to play, hard to master<br>` },
-    strafe: { t: "HitBit Strafe", c: `Track the orb with your crosshair in this unpredictable neon aim-trainer.<br><br><strong>How it works:</strong><br>• The orb moves with chaotic bursts and jukes<br>• Stay on target to deal damage<br>• Kill the orb to score points<br>• 60-second rounds<br><br><strong>Features:</strong><br>• Neon arcade visuals<br>• Smooth unpredictable movement<br>• Accuracy graph at the end of each run<br>• Desktop crosshair mode<br>` },
-    memory: { t: "HitBit Memory", c: `Repeat the glowing pattern on the 3×3 neon grid.<br><br><strong>How it works:</strong><br>• Watch the sequence of glowing tiles<br>• Repeat the pattern exactly<br>• Each round adds one more tile<br>• Difficulty ramps fast<br><br><strong>Rank System:</strong><br>• Bronze → Silver → Gold → Diamond → Obsidian → Mythic<br>• Each rank has 5 steps of progress<br>• Your segment fills as you advance<br><br><strong>Features:</strong><br>• Neon visuals<br>• Smooth animations<br>• Rank ladder with progress bar<br>• Score graph tracking your last 20 runs<br>` }
+    orbfall: { t: "Orb-Fall", c: `Test your reflexes in <strong>Orb-Fall</strong>, a fast-paced arcade game where neon orbs fall from the top of the screen!<br><br><strong>How it works:</strong><br>• Tap normal orbs to score points<br>• Avoid bombs (red balls) — they cost a heart<br>• Catch hearts (pink balls) to stay alive<br>• Build combos for massive scores<br>` },
+    strafe: { t: "HitBit Strafe", c: `Track the orb with your crosshair in this unpredictable neon aim-trainer.<br><br><strong>How it works:</strong><br>• The orb moves with chaotic bursts and jukes<br>• Stay on target to deal damage<br>• Kill the orb to score points<br>• 60-second rounds<br>` },
+    memory: { t: "HitBit Memory", c: `Repeat the glowing pattern on the 3×3 neon grid.<br><br><strong>How it works:</strong><br>• Watch the sequence of glowing tiles<br>• Repeat the pattern exactly<br>• Each round adds one more tile<br><br><strong>Rank System:</strong><br>• Bronze → Mythic<br>• Score graph tracking your last 20 runs<br>` }
   };
 
   title.textContent = data[game].t;
