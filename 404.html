@@ -1,94 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>404 - Page Not Found</title>
+  <meta charset="UTF-8">
+  <title>404 - Page Not Found | HitBit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Correct favicon path for GitHub Pages -->
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700;900&display=swap" rel="stylesheet">
+  
   <link rel="icon" href="/HitBit/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="/HitBit/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="/HitBit/favicon.ico">
 
   <style>
     :root {
-      --neon: #00ff88;
-      --bg: #000;
-      --glow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+      --brand: #00ff88;
+      --bg: #010409;
+      --text: #ffffff;
+      --text-muted: #888888;
     }
 
     body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--neon);
-      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Overpass', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       overflow: hidden;
-      text-align: center;
+      position: relative;
+    }
+
+    /* Animated Nebula Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(0, 255, 136, 0.12) 0px, transparent 40%),
+        radial-gradient(at 90% 10%, rgba(0, 255, 136, 0.08) 0px, transparent 35%),
+        radial-gradient(at 50% 90%, rgba(0, 255, 136, 0.15) 0px, transparent 50%);
+      filter: blur(60px);
+      animation: nebula-drift 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes nebula-drift {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 100%; }
     }
 
     .container {
-      animation: fadeIn 1s ease forwards;
+      text-align: center;
+      padding: 2rem;
+      max-width: 500px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .code {
+      font-size: clamp(100px, 15vw, 160px);
+      font-weight: 900;
+      line-height: 0.9;
+      margin: 0;
+      background: linear-gradient(180deg, #fff 40%, var(--brand) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -6px;
     }
 
     h1 {
-      font-size: 80px;
-      font-weight: bold;
-      text-shadow: var(--glow);
-      letter-spacing: 4px;
-      animation: glitch 1.5s infinite;
+      font-size: 28px;
+      font-weight: 700;
+      margin: 15px 0 10px 0;
     }
 
-    p {
-      font-size: 22px;
-      opacity: 0.85;
-      margin-top: -10px;
-      margin-bottom: 25px;
-      text-shadow: 0 0 10px var(--neon);
+    #status-msg {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      min-height: 1.6em;
     }
 
-    a {
-      color: var(--neon);
-      font-size: 20px;
-      text-decoration: none;
-      padding: 10px 20px;
-      border: 2px solid var(--neon);
-      border-radius: 8px;
-      text-shadow: var(--glow);
-      transition: 0.2s ease;
-    }
-
-    a:hover {
-      background: var(--neon);
+    .btn {
+      display: inline-block;
+      background-color: var(--brand);
       color: #000;
-      box-shadow: var(--glow);
+      text-decoration: none;
+      padding: 16px 36px;
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
     }
 
-    @keyframes glitch {
-      0% { text-shadow: var(--glow); }
-      20% { text-shadow: 2px 0 #ff0066, -2px 0 #00ccff; }
-      40% { text-shadow: -2px 0 #ff0066, 2px 0 #00ccff; }
-      60% { text-shadow: var(--glow); }
-      80% { text-shadow: -3px 0 #ff0066, 3px 0 #00ccff; }
-      100% { text-shadow: var(--glow); }
+    .redirecting {
+        color: var(--brand) !important;
+        font-weight: 700;
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>404</h1>
-    <p>This page glitched out of existence.</p>
 
-    <!-- FIXED home link -->
-    <a href="/HitBit/">Return to HitBit Home</a>
+  <div class="container">
+    <p class="code">404</p>
+    <h1>Page not found</h1>
+    <p id="status-msg">Sorry, the page you are looking for doesn't exist.</p>
+    <a href="/HitBit/" class="btn">Back to homepage</a>
   </div>
+
+  <script>
+    // Site Map mapping keywords to their actual subfolder paths
+    const pageMap = {
+      "strafe": "/HitBit/games/strafe/",
+      "stack": "/HitBit/games/stack/",
+      "visualreaction": "/HitBit/games/visualreaction/",
+      "timingchallenge": "/HitBit/games/timingchallenge/",
+      "orb-fall": "/HitBit/games/Orb-Fall/",
+      "memory": "/HitBit/games/memory/",
+      "home": "/HitBit/"
+    };
+
+    function getLevenshteinDistance(a, b) {
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) matrix[i][j] = matrix[i - 1][j - 1];
+          else matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    function tryAutoRedirect() {
+      // Get the segment the user typed (e.g., 'straf' from 'HitBit/straf')
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const userTyped = pathSegments[pathSegments.length - 1] || "";
+      const cleanInput = userTyped.toLowerCase().replace(".html", "");
+      
+      if (!cleanInput || cleanInput === "hitbit") return;
+
+      let bestMatchKey = null;
+      let minDistance = 3; // Allow up to 2 typos
+
+      Object.keys(pageMap).forEach(key => {
+        const distance = getLevenshteinDistance(cleanInput, key);
+        if (distance < minDistance) {
+          minDistance = distance;
+          bestMatchKey = key;
+        }
+      });
+
+      if (bestMatchKey) {
+        const msg = document.getElementById('status-msg');
+        msg.classList.add('redirecting');
+        msg.innerHTML = `Searching system... Redirecting to <strong>${bestMatchKey}</strong>`;
+        
+        setTimeout(() => {
+          window.location.href = pageMap[bestMatchKey];
+        }, 1200);
+      }
+    }
+
+    window.onload = tryAutoRedirect;
+  </script>
 </body>
 </html>
