@@ -32,7 +32,6 @@
       position: relative;
     }
 
-    /* Animated Nebula Background */
     body::before {
       content: '';
       position: absolute;
@@ -112,20 +111,18 @@
   <div class="container">
     <p class="code">404</p>
     <h1>Page not found</h1>
-    <p id="status-msg">Sorry, the page you are looking for doesn't exist.</p>
+    <p id="status-msg">The requested resource could not be found.</p>
     <a href="/HitBit/" class="btn">Back to homepage</a>
   </div>
 
   <script>
-    // Site Map mapping keywords to their actual subfolder paths
     const pageMap = {
       "strafe": "/HitBit/games/strafe/",
       "stack": "/HitBit/games/stack/",
       "visualreaction": "/HitBit/games/visualreaction/",
       "timingchallenge": "/HitBit/games/timingchallenge/",
       "orb-fall": "/HitBit/games/Orb-Fall/",
-      "memory": "/HitBit/games/memory/",
-      "home": "/HitBit/"
+      "memory": "/HitBit/games/memory/"
     };
 
     function getLevenshteinDistance(a, b) {
@@ -142,32 +139,44 @@
     }
 
     function tryAutoRedirect() {
-      // Get the segment the user typed (e.g., 'straf' from 'HitBit/straf')
       const pathSegments = window.location.pathname.split('/').filter(Boolean);
       const userTyped = pathSegments[pathSegments.length - 1] || "";
       const cleanInput = userTyped.toLowerCase().replace(".html", "");
       
-      if (!cleanInput || cleanInput === "hitbit") return;
+      // Don't redirect if the input is too short or just the site name
+      if (cleanInput.length < 2 || cleanInput === "hitbit") return;
 
       let bestMatchKey = null;
-      let minDistance = 3; // Allow up to 2 typos
-
-      Object.keys(pageMap).forEach(key => {
-        const distance = getLevenshteinDistance(cleanInput, key);
-        if (distance < minDistance) {
-          minDistance = distance;
+      
+      // 1. First Check: Direct 'Contains' (Highest Priority)
+      // If they type 'st', it finds 'strafe' or 'stack'
+      for (let key in pageMap) {
+        if (key.includes(cleanInput) || cleanInput.includes(key)) {
           bestMatchKey = key;
+          break; 
         }
-      });
+      }
+
+      // 2. Second Check: Fuzzy Match (If 'contains' fails)
+      if (!bestMatchKey) {
+        let minDistance = 4; // Increased tolerance
+        Object.keys(pageMap).forEach(key => {
+          const distance = getLevenshteinDistance(cleanInput, key);
+          if (distance < minDistance) {
+            minDistance = distance;
+            bestMatchKey = key;
+          }
+        });
+      }
 
       if (bestMatchKey) {
         const msg = document.getElementById('status-msg');
         msg.classList.add('redirecting');
-        msg.innerHTML = `Searching system... Redirecting to <strong>${bestMatchKey}</strong>`;
+        msg.innerHTML = `Path match found: <strong>${bestMatchKey}</strong>. Redirecting...`;
         
         setTimeout(() => {
           window.location.href = pageMap[bestMatchKey];
-        }, 1200);
+        }, 800); // Faster redirect for better UX
       }
     }
 
