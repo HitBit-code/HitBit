@@ -7,6 +7,7 @@
   <link rel="icon" href="/HitBit/favicon.ico?v=3" type="image/x-icon">
   <link rel="shortcut icon" href="/HitBit/favicon.ico?v=3" type="image/x-icon">
   <link rel="apple-touch-icon" href="/HitBit/favicon.ico?v=3">
+  <link rel="stylesheet" href="../../hitbit-shared.css">
 
   <style>
     :root {
@@ -54,10 +55,10 @@
 
     #gameContainer {
       position: absolute;
-      top: calc(50% + 24px); /* shift down by half the taskbar height */
+      top: 50%;
       left: 50%;
-      width: min(80vw, calc(100vh - 80px));
-      height: min(80vw, calc(100vh - 80px));
+      width: min(90vw, 90vh);
+      height: min(90vw, 90vh);
       transform: translate(-50%, -50%);
       border: 3px solid var(--neon);
       border-radius: 16px;
@@ -104,9 +105,8 @@
   </style>
 </head>
 
-<body>
+<body data-hitbit-page="game" data-hitbit-game="visualreaction">
 
-  <div id="logo">HitBit</div>
   <div id="modeLabel">Visual Reaction Challenge</div>
 
   <div id="gameContainer">
@@ -246,5 +246,6 @@
     });
   </script>
 
+  <script src="../../hitbit-shared.js"></script>
 </body>
 </html>
