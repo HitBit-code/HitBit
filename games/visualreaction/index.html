@@ -4,10 +4,9 @@
   <title>Visual Reaction Challenge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="icon" href="/favicon.ico?v=3" type="image/x-icon">
-  <link rel="shortcut icon" href="/favicon.ico?v=3" type="image/x-icon">
-  <link rel="apple-touch-icon" href="/favicon.ico?v=3">
-<link rel="stylesheet" href="../../assets/hitbit-shared.css?v=2">
+  <link rel="icon" href="/HitBit/favicon.ico?v=3" type="image/x-icon">
+  <link rel="shortcut icon" href="/HitBit/favicon.ico?v=3" type="image/x-icon">
+  <link rel="apple-touch-icon" href="/HitBit/favicon.ico?v=3">
 
   <style>
     :root {
@@ -40,7 +39,6 @@
       color: var(--neon);
       text-shadow: 0 0 12px var(--neon);
       z-index: 10;
-      cursor: pointer;
     }
 
     #modeLabel {
@@ -56,10 +54,10 @@
 
     #gameContainer {
       position: absolute;
-      top: 50%;
+      top: calc(50% + 24px); /* shift down by half the taskbar height */
       left: 50%;
-      width: min(90vw, 90vh);
-      height: min(90vw, 90vh);
+      width: min(80vw, calc(100vh - 80px));
+      height: min(80vw, calc(100vh - 80px));
       transform: translate(-50%, -50%);
       border: 3px solid var(--neon);
       border-radius: 16px;
@@ -106,7 +104,7 @@
   </style>
 </head>
 
-<body data-hitbit-page="game" data-hitbit-remove="#logo">
+<body>
 
   <div id="logo">HitBit</div>
   <div id="modeLabel">Visual Reaction Challenge</div>
@@ -117,11 +115,6 @@
 
   <script>
     let gameBox = document.getElementById("gameBox");
-    const logo = document.getElementById("logo");
-
-    logo.addEventListener("click", () => {
-      window.location.href = "/";
-    });
 
     let waiting = false;
     let canReact = false;
@@ -243,7 +236,7 @@
       }
     }
 
-    gameBox.addEventListener("click", handleInput);
+    gameBox.addEventListener("pointerdown", handleInput);
 
     document.addEventListener("keydown", (e) => {
       if (e.code === "Space") {
@@ -252,7 +245,6 @@
       }
     });
   </script>
-<script src="../../assets/hitbit-shared.js?v=4"></script>
 
 </body>
 </html>
