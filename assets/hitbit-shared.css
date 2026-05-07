@@ -103,6 +103,10 @@ body[data-hitbit-page="game"] {
   display: flex;
 }
 
+.hb-modal-backdrop {
+  font-family: 'Overpass', system-ui, sans-serif;
+}
+
 .hb-modal {
   width: min(460px, 100%);
   max-height: min(80vh, 760px);
@@ -112,6 +116,7 @@ body[data-hitbit-page="game"] {
   border: 1px solid var(--hb-panel-border);
   background: var(--hb-panel-bg);
   color: #fff;
+  font-family: 'Overpass', system-ui, sans-serif;
 }
 
 .hb-modal-wide {
