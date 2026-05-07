@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Overpass:wght@300;600;700&display=swap');
+
 :root {
   --hb-toolbar-height: 58px;
   --hb-toolbar-bg: rgba(7, 11, 8, 0.96);
@@ -25,6 +27,7 @@
   background: var(--hb-toolbar-bg);
   border-bottom: 1px solid var(--hb-toolbar-border);
   backdrop-filter: blur(12px);
+  font-family: 'Overpass', system-ui, sans-serif;
 }
 
 body[data-hitbit-page="home"] {
