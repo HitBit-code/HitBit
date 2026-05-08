@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Reaction — HitBit</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@300;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/hitbit-shared.css?v=5">
+  <style>
+    body {
+      margin: 0;
+      background: #050505;
+      overflow: hidden;
+    }
+    #hb-game-frame {
+      position: fixed;
+      top: var(--hb-toolbar-height, 58px);
+      left: 0;
+      width: 100%;
+      height: calc(100vh - var(--hb-toolbar-height, 58px));
+      border: none;
+      display: block;
+      touch-action: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
+</head>
+<body data-hitbit-game="visualreaction">
+  <iframe
+    id="hb-game-frame"
+    src="/protected/visualreaction/index.html"
+    sandbox="allow-scripts allow-forms allow-pointer-lock allow-same-origin allow-top-navigation-by-user-activation"
+    allow="pointer-lock *" allowfullscreen
+    title="Visual Reaction game"
+  ></iframe>
+
+  <script src="/assets/hitbit-shared.js?v=4"></script>
+  <script>
+    // Queue messages that arrive before HitBitGlobal.init() completes
+    var _hbReady = false;
+    var _hbQueue = [];
+
+    function _hbHandleMsg(msg) {
+      if (!msg || typeof msg !== 'object') return;
+      if (msg.type === 'HB_START_SESSION') {
+        window.HitBitGlobal && window.HitBitGlobal.startSession(msg.game);
+      }
+      if (msg.type === 'HB_SUBMIT_SCORE') {
+        window.HitBitGlobal && window.HitBitGlobal.submitScore(msg.payload);
+      }
+      if (msg.type === 'HB_NAVIGATE') {
+        window.location.href = msg.url;
+      }
+    }
+
+    window.addEventListener('message', function(event) {
+      if (event.origin !== window.location.origin) return;
+      if (_hbReady) {
+        _hbHandleMsg(event.data);
+      } else {
+        _hbQueue.push(event.data);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      _hbReady = true;
+      _hbQueue.forEach(function(msg) { _hbHandleMsg(msg); });
+      _hbQueue = [];
+    });
+  </script>
+</body>
+</html>
