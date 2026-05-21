@@ -43,7 +43,7 @@
     var _hbReady = false;
     var _hbQueue = [];
 
-    function _hbHandleMsg(msg) {
+    function _hbHandleMsg(msg, event) {
       if (!msg || typeof msg !== 'object') return;
       if (msg.type === 'HB_START_SESSION') {
         window.HitBitGlobal && window.HitBitGlobal.startSession(msg.game);
@@ -54,20 +54,28 @@
       if (msg.type === 'HB_NAVIGATE') {
         window.location.href = msg.url;
       }
+      if (msg.type === 'HB_LS_GET') {
+        var val = null;
+        try { val = localStorage.getItem(msg.key); } catch(e) {}
+        event.source.postMessage({ type: 'HB_LS_RESPONSE', id: msg.id, value: val }, '*');
+      }
+      if (msg.type === 'HB_LS_SET') {
+        try { localStorage.setItem(msg.key, msg.value); } catch(e) {}
+      }
     }
 
     window.addEventListener('message', function(event) {
       if (event.origin !== 'https://hitbit-games.github.io') return;
       if (_hbReady) {
-        _hbHandleMsg(event.data);
+        _hbHandleMsg(event.data, event);
       } else {
-        _hbQueue.push(event.data);
+        _hbQueue.push({msg: event.data, event: event});
       }
     });
 
     document.addEventListener('DOMContentLoaded', function() {
       _hbReady = true;
-      _hbQueue.forEach(function(msg) { _hbHandleMsg(msg); });
+      _hbQueue.forEach(function(item) { _hbHandleMsg(item.msg, item.event); });
       _hbQueue = [];
     });
   </script>
